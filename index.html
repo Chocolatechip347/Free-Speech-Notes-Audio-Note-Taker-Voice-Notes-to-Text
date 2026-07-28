@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Free Online Voice Notes & Stream-of-Consciousness Thought Capture</title>
+  <meta name="description" content="Effortlessly capture your thoughts hands-free. Real-time stream-of-consciousness voice dictation with quick exports and instant AI cleanup.">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-container">
+    <header class="app-header">
+      <h1>Thought Flow</h1>
+      <p class="subtitle">Stream-of-consciousness voice dictation & thought capture</p>
+    </header>
+
+    <main class="main-content">
+      <!-- Voice Controls Bar -->
+      <div class="controls-bar">
+        <button id="start-btn" class="btn btn-primary">🎤 Start Dictating</button>
+        <button id="stop-btn" class="btn btn-secondary" disabled>🛑 Pause</button>
+        <div id="status-indicator" class="status-badge status-idle">
+          <span class="status-dot"></span>
+          <span id="status-text">Status: Idle</span>
+        </div>
+      </div>
+
+      <!-- Main Dictation Notepad -->
+      <div class="editor-wrapper">
+        <textarea 
+          id="notepad" 
+          placeholder="Start speaking or typing... your stream-of-consciousness thoughts will appear here continuously without interrupting your flow."
+          spellcheck="true"
+        ></textarea>
+      </div>
+
+      <!-- Quick Action / Export Buttons -->
+      <div class="action-bar">
+        <button onclick="copyText()" class="btn btn-utility">📋 Copy Text</button>
+        <button onclick="sendToDocs()" class="btn btn-utility">📄 Open in Google Docs</button>
+        <button onclick="sendToOutlook()" class="btn btn-utility">✉️ Send via Email</button>
+        <button onclick="clearText()" class="btn btn-danger">🗑️ Clear</button>
+      </div>
+
+      <!-- Monetization Teaser Section -->
+      <section class="ai-upgrade-card">
+        <div class="card-header">
+          <h3>⚡ AI Thought Structurer</h3>
+          <span class="price-badge">$0.99 per clean-up</span>
+        </div>
+        <p class="card-description">
+          Turn your raw, rambling voice notes into polished bullet points, executive summaries, and actionable to-do items instantly.
+        </p>
+        
+        <!-- Mock Locked Preview -->
+        <div class="preview-box locked">
+          <div class="blur-overlay">
+            <button onclick="triggerAICleanup()" class="btn btn-accent btn-lg">
+              ✨ Unlock AI Clean-Up ($0.99)
+            </button>
+          </div>
+          <div class="mock-output">
+            <h4>Sample Cleaned Output:</h4>
+            <ul>
+              <li><strong>Key Insight:</strong> Streamline daily task management via automated voice logs.</li>
+              <li><strong>Action Item:</strong> Deploy initial HTML/JS prototype to production web hosting.</li>
+              <li><strong>Summary:</strong> Zero-friction dictation tool designed for continuous thought capture.</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <p>100% Client-Side Dictation • Private & Secure • Powered by Web Speech API</p>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
