@@ -40,7 +40,31 @@
       <!-- Main Header -->
 <h1>Free Speech to Text Notes & Audio Notepad</h1>
 <p className="subtitle">ThoughtFlow is the fast, private way to dictate memos, capture ideas, and create natural speech notes in your browser.</p>
+:root {
+  /* Cyberpunk / Modern Dark Theme */
+  --bg-color: #0f172a;
+  --card-bg: #1e293b;
+  --text-primary: #f8fafc;
+  --text-muted: #94a3b8;
+  --accent-color: #6366f1;
+  --border-color: rgba(255, 255, 255, 0.1);
+}
 
+body {
+  background-color: var(--bg-color);
+  color: var(--text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Fixes link styling across dark mode */
+a {
+  color: var(--text-muted);
+  transition: color 0.2s ease;
+}
+
+a:hover {
+  color: var(--text-primary);
+}
 <!-- Content section below your audio tool to meet the 250+ word SEO requirement -->
 <section className="seo-content">
   <h2>Your Online Voice Notepad & Speech Notes App</h2>
