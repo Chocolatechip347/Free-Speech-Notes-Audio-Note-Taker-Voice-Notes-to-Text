@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Contact Us | ThoughtFlow Notes</title>
+  <meta name="description" content="Get in touch with the ThoughtFlow team for support, feedback, or inquiries." />
+</head>
+<body>
+  <main style="max-width: 600px; margin: 40px auto; padding: 0 20px; font-family: sans-serif;">
+    <h1>Contact ThoughtFlow</h1>
+    <p>Have questions, feedback, or need support? Drop us a message below.</p>
+
+    <!-- Example using Web3Forms or Formspree -->
+    <form action="https://api.web3forms.com/submit" method="POST">
+      <!-- Replace with your free form access key -->
+      <input type="hidden" name="access_key" value="YOUR_ACCESS_KEY_HERE">
+
+      <div style="margin-bottom: 15px;">
+        <label for="name" style="display:block; margin-bottom: 5px;">Name</label>
+        <input type="text" id="name" name="name" required style="width: 100%; padding: 8px;">
+      </div>
+
+      <div style="margin-bottom: 15px;">
+        <label for="email" style="display:block; margin-bottom: 5px;">Email</label>
+        <input type="email" id="email" name="email" required style="width: 100%; padding: 8px;">
+      </div>
+
+      <div style="margin-bottom: 15px;">
+        <label for="message" style="display:block; margin-bottom: 5px;">Message</label>
+        <textarea id="message" name="message" rows="5" required style="width: 100%; padding: 8px;"></textarea>
+      </div>
+
+      <button type="submit" style="padding: 10px 20px; cursor: pointer;">Send Message</button>
+    </form>
+
+    <p style="margin-top: 30px;"><a href="/">← Back to ThoughtFlow App</a></p>
+  </main>
+</body>
+</html>
