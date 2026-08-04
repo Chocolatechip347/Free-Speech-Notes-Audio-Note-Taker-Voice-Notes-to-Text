@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About ThoughtFlow — Free Voice Notes, Instructions & Use Cases</title>
+  <meta name="description" content="Learn how ThoughtFlow provides unlimited, free speech-to-text dictation with no sign-ups or paywalls. Read instructions, privacy details, and popular use cases." />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- Navigation -->
+  <header class="navbar">
+    <div class="logo"><a href="index.html">ThoughtFlow</a></div>
+    <nav>
+      <a href="index.html">App</a>
+      <a href="about.html" class="active">About & Use Cases</a>
+      <a href="privacy.html">Privacy</a>
+    </nav>
+  </header>
+
+  <main class="content-container">
+
+    <!-- Section 1: About ThoughtFlow -->
+    <section class="about-section">
+      <h1>About ThoughtFlow</h1>
+      <p class="lead">
+        ThoughtFlow was built to eliminate the friction between thinking and capturing ideas. Most voice-to-text tools enforce 3-minute recording limits, mandate weekly word caps, or require monthly subscriptions just to dictate a basic note.
+      </p>
+      <p>
+        ThoughtFlow is a 100% free, web-based voice notepad designed for speed and privacy. There are zero accounts to set up, no credit cards required, and no artificial length caps on your dictation.
+      </p>
+    </section>
+
+    <!-- Section 2: Instructions / How to Use -->
+    <section class="instructions-section">
+      <h2>How to Use ThoughtFlow</h2>
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-num">1</div>
+          <h3>Check Audio Input</h3>
+          <p>Connect your internal microphone or Bluetooth headset. ThoughtFlow automatically detects active audio inputs so you can record instantly.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">2</div>
+          <h3>Click & Dictate</h3>
+          <p>Press the record button or hit <kbd>Spacebar</kbd> to begin. Speak naturally—your spoken words appear on screen in real time with zero length restrictions.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-num">3</div>
+          <h3>Organize & Export</h3>
+          <p>Use built-in utility buttons to copy your text, clear the workspace, split thoughts into topics, or export directly to Google Docs or a <code>.TXT</code> file.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 3: Popular Use Cases -->
+    <section class="use-cases-section">
+      <h2>What You Can Use ThoughtFlow For</h2>
+      
+      <div class="use-case">
+        <h3>🎙️ Stream of Consciousness & Brain Dumps</h3>
+        <p>When thoughts move faster than your typing speed (150 WPM spoken vs. 40 WPM typed), use ThoughtFlow as an unfiltered canvas. Get ideas down before they fade, then use AI prompts to organize them into structured outlines.</p>
+      </div>
+
+      <div class="use-case">
+        <h3>♿ Hands-Free Accessibility & Ergonomics</h3>
+        <p>For individuals dealing with Repetitive Strain Injury (RSI), carpal tunnel, or physical fatigue from typing all day, ThoughtFlow provides full hands-free dictation with large interactive targets and dark mode visibility.</p>
+      </div>
+
+      <div class="use-case">
+        <h3>🚶 Thinking While Moving</h3>
+        <p>Creative breakthroughs often happen while walking, pacing, or stretching away from a desk. ThoughtFlow works seamlessly in mobile browsers so you can dictate on the go.</p>
+      </div>
+
+      <div class="use-case">
+        <h3>🎬 Scenes, Movie Scripts & Dialogue</h3>
+        <p>Writers and screenwriters can speak character lines out loud to test cadence, rhythm, and natural speech flow without stopping to format text manually.</p>
+      </div>
+
+      <div class="use-case">
+        <h3>🎲 Tabletop RPGs & Solo Campaign Logs</h3>
+        <p>Game Masters and solo RPG players can log narrative scenes, NPC interactions, and combat outcomes live at the gaming table without breaking immersion.</p>
+      </div>
+    </section>
+
+    <!-- Section 4: Privacy Guarantee -->
+    <section class="privacy-guarantee">
+      <h2>🔒 Built for Privacy</h2>
+      <p>
+        Your thoughts belong to you. Audio processing happens live in your browser using local web engines. Transcripts are stored locally in your browser cache (<code>localStorage</code>) and are never sold or used to train third-party AI models.
+      </p>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>&copy; ThoughtFlow. All rights reserved. | <a href="privacy.html">Privacy Policy</a></p>
+  </footer>
+
+</body>
+</html>
