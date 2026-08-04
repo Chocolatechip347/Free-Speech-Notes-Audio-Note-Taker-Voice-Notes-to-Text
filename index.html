@@ -6,16 +6,18 @@
   <title>Free Online Voice Notes & Stream-of-Consciousness Thought Capture</title>
   <meta name="description" content="Effortlessly capture your thoughts hands-free. Real-time stream-of-consciousness voice dictation with quick exports and instant AI cleanup.">
   <link rel="stylesheet" href="style.css">
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 <body>
   <div class="app-container">
     <header class="app-header">
       <h1>Free Speech to Text Notes & Audio Notepad</h1>
-      <p class="subtitle">Capture your thoughts instantly with ThoughtFlow. Our free speech to text note and audio notepad tool provides fast browser-based voice notes to text conversion.</p>
+      <p class="subtitle">ThoughtFlow is the fast, private way to dictate memos, capture ideas, and create natural speech notes in your browser.</p>
+      <p class="feedback-link">
+        Have feedback? <a href="/contact.html">Contact us</a>
+      </p>
     </header>
-<p style={{ fontSize: '0.8rem', color: '#94a3b8', marginTop: '12px' }}>
-  Have feedback? <a href="/contact.html" style={{ color: '#e2e8f0' }}>Contact us</a>
-</p>
+
     <main class="main-content">
       <!-- Voice Controls Bar -->
       <div class="controls-bar">
@@ -26,9 +28,7 @@
           <span id="status-text">Status: Idle</span>
         </div>
       </div>
-<p style={{ fontSize: '0.8rem', color: '#94a3b8', marginTop: '12px' }}>
-  Have feedback? <a href="/contact.html" style={{ color: '#e2e8f0' }}>Contact us</a>
-</p>
+
       <!-- Main Dictation Notepad -->
       <div class="editor-wrapper">
         <textarea 
@@ -37,75 +37,47 @@
           spellcheck="true"
         ></textarea>
       </div>
-      <!-- Main Header -->
-<h1>Free Speech to Text Notes & Audio Notepad</h1>
-<p className="subtitle">ThoughtFlow is the fast, private way to dictate memos, capture ideas, and create natural speech notes in your browser.</p>
-:root {
-  /* Cyberpunk / Modern Dark Theme */
-  --bg-color: #0f172a;
-  --card-bg: #1e293b;
-  --text-primary: #f8fafc;
-  --text-muted: #94a3b8;
-  --accent-color: #6366f1;
-  --border-color: rgba(255, 255, 255, 0.1);
-}
 
-body {
-  background-color: var(--bg-color);
-  color: var(--text-primary);
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-}
-
-/* Fixes link styling across dark mode */
-a {
-  color: var(--text-muted);
-  transition: color 0.2s ease;
-}
-
-a:hover {
-  color: var(--text-primary);
-}
-<!-- Content section below your audio tool to meet the 250+ word SEO requirement -->
-<section className="seo-content">
-  <h2>Your Online Voice Notepad & Speech Notes App</h2>
-  <p>
-    Capture ideas instantly without typing a word. ThoughtFlow is an easy-to-use 
-    <strong>speech notes app</strong> that functions as your personal, always-available 
-    <strong>voice notepad</strong>. Just click the microphone button, start talking, and 
-    see your words converted directly from <strong>speech to text note</strong>.
-  </p>
-  <p>
-    It's the fastest way to dictate a memo, brainstorm a list, or create a quick 
-    <strong>speechnote</strong> directly in your web browser. Whether you need a simple 
-    <strong>voice notepad</strong> or a complete <strong>audio notes transcription</strong> tool, 
-    ThoughtFlow keeps your focus on your thoughts, not on your keyboard.
-  </p>
-
-  <h2>Effortless Audio Notes to Text</h2>
-  <p>
-    If you need more than just a quick memo, ThoughtFlow offers reliable 
-    <strong>audio transcription for meeting notes</strong> and lectures. We make it simple to 
-    <strong>transcribe voice recordings to text</strong>, saving you hours of manual work.
-  </p>
-  <p>
-    Many users rely on ThoughtFlow for professional <strong>audio notes to text</strong> conversion. 
-    It is an essential tool for <strong>voice notes transcription</strong>—allowing you to quickly 
-    organize ideas or dictate full long-form drafts.
-  </p>
-
-  </p>
-  <p>
-    Need to save to your personal notes file? No worries! Thoughtflow saves your note so that whenever you are ready,
-    it can be uploaded anywhere anytime.
-  </p>
-</section>
       <!-- Quick Action / Export Buttons -->
       <div class="action-bar">
         <button onclick="copyText()" class="btn btn-utility">📋 Copy Text</button>
-        <button onclick="sendToDocs()" class="btn btn-utility">📄 Open in Google Docs</button>
+        <button id="google-docs-btn" onclick="exportToGoogleDocs()" class="btn btn-utility">📄 Save to Google Docs</button>
         <button onclick="sendToOutlook()" class="btn btn-utility">✉️ Send via Email</button>
         <button onclick="clearText()" class="btn btn-danger">🗑️ Clear</button>
       </div>
+
+      <!-- SEO Content Section -->
+      <section class="seo-content">
+        <h2>Your Online Voice Notepad & Speech Notes App</h2>
+        <p>
+          Capture ideas instantly without typing a word. ThoughtFlow is an easy-to-use 
+          <strong>speech notes app</strong> that functions as your personal, always-available 
+          <strong>voice notepad</strong>. Just click the microphone button, start talking, and 
+          see your words converted directly from <strong>speech to text note</strong>.
+        </p>
+        <p>
+          It's the fastest way to dictate a memo, brainstorm a list, or create a quick 
+          <strong>speechnote</strong> directly in your web browser. Whether you need a simple 
+          <strong>voice notepad</strong> or a complete <strong>audio notes transcription</strong> tool, 
+          ThoughtFlow keeps your focus on your thoughts, not on your keyboard.
+        </p>
+
+        <h2>Effortless Audio Notes to Text</h2>
+        <p>
+          If you need more than just a quick memo, ThoughtFlow offers reliable 
+          <strong>audio transcription for meeting notes</strong> and lectures. We make it simple to 
+          <strong>transcribe voice recordings to text</strong>, saving you hours of manual work.
+        </p>
+        <p>
+          Many users rely on ThoughtFlow for professional <strong>audio notes to text</strong> conversion. 
+          It is an essential tool for <strong>voice notes transcription</strong>—allowing you to quickly 
+          organize ideas or dictate full long-form drafts.
+        </p>
+        <p>
+          Need to save to your personal notes file? No worries! Thoughtflow saves your note so that whenever you are ready,
+          it can be uploaded anywhere anytime.
+        </p>
+      </section>
 
       <!-- Monetization Teaser Section -->
       <section class="ai-upgrade-card">
@@ -138,25 +110,12 @@ a:hover {
 
     <footer class="app-footer">
       <p>100% Client-Side Dictation • Private & Secure • Powered by Web Speech API</p>
+      <p style="margin-top: 10px;">
+        <a href="/contact.html" style="color: #94a3b8; text-decoration: none; font-size: 0.85rem;">Contact & Support</a>
+      </p>
     </footer>
   </div>
- <footer style={{
-  marginTop: '60px',
-  padding: '20px',
-  textAlign: 'center',
-  borderTop: '1px solid rgba(255, 255, 255, 0.1)'
-}}>
-  <a 
-    href="/contact.html" 
-    style={{
-      color: '#94a3b8', // Muted, readable light gray for dark mode
-      textDecoration: 'none',
-      fontSize: '0.85rem'
-    }}
-  >
-    Contact & Support
-  </a>
-</footer>
+
   <script src="app.js"></script>
 </body>
 </html>
