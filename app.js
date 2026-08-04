@@ -1,69 +1,77 @@
-// DOM Elements
-const startBtn = document.getElementById('start-btn');
-const stopBtn = document.getElementById('stop-btn');
-const notepad = document.getElementById('notepad');
-const statusText = document.getElementById('status-text');
+// Google Drive API Configuration
+const CLIENT_ID = '77521483085-00bbkjm3k8bs4s3q04sic19iikl1mc87.apps.googleusercontent.com';
+const SCOPE = 'https://www.googleapis.com/auth/drive.file';
 
-// Initialize Web Speech API
-const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+let tokenClient;
 
-if (SpeechRecognition) {
-  const recognition = new SpeechRecognition();
-  recognition.continuous = true;
-  recognition.interimResults = true;
+// Helper to safely retrieve notepad text
+function getTranscriptText() {
+  const notepad = document.getElementById('notepad');
+  return notepad ? notepad.value : '';
+}
 
-  recognition.onstart = () => {
-    statusText.innerText = "Status: Dictating...";
-    startBtn.disabled = true;
-    stopBtn.disabled = false;
-  };
+// 1. Google Docs Export (Clipboard + docs.new Fast Fallback)
+window.exportToGoogleDocs = function() {
+  const textContent = getTranscriptText();
+  
+  if (!textContent.trim()) {
+    alert("There is no text to save!");
+    return;
+  }
 
-  recognition.onresult = (event) => {
-    let transcript = '';
-    for (let i = event.resultIndex; i < event.results.length; i++) {
-      transcript += event.results[i][0].transcript;
+  // Copies text to clipboard and launches Google Docs
+  navigator.clipboard.writeText(textContent).then(() => {
+    alert("Transcript copied to clipboard! Opening Google Docs—press Ctrl+V (or Cmd+V) to paste.");
+    window.open('https://docs.new', '_blank');
+  }).catch(err => {
+    console.error("Clipboard copy failed:", err);
+    alert("Failed to copy text automatically. Please copy your notes manually.");
+  });
+};
+
+// 2. Copy Text Function
+window.copyText = function() {
+  const text = getTranscriptText();
+  if (!text.trim()) return alert("Nothing to copy!");
+  navigator.clipboard.writeText(text).then(() => alert("Copied to clipboard!"));
+};
+
+// 3. Clear Text Function
+window.clearText = function() {
+  const notepad = document.getElementById('notepad');
+  if (notepad && confirm("Are you sure you want to clear your notes?")) {
+    notepad.value = '';
+  }
+};
+
+// 4. Send via Email Function
+window.sendToOutlook = function() {
+  const text = getTranscriptText();
+  if (!text.trim()) return alert("Nothing to send!");
+  const mailtoUrl = `mailto:?subject=${encodeURIComponent("ThoughtFlow Note")}&body=${encodeURIComponent(text)}`;
+  window.location.href = mailtoUrl;
+};
+
+// 5. AI Cleanup Function
+window.triggerAICleanup = function() {
+  alert("AI Clean-Up payment integration coming soon!");
+};
+
+// Initialize Google Identity Client on DOM ready
+window.addEventListener('DOMContentLoaded', () => {
+  if (window.google) {
+    try {
+      tokenClient = google.accounts.oauth2.initTokenClient({
+        client_id: CLIENT_ID,
+        scope: SCOPE,
+        callback: (tokenResponse) => {
+          if (tokenResponse.access_token) {
+            console.log("Google Access Token Received:", tokenResponse.access_token);
+          }
+        },
+      });
+    } catch (e) {
+      console.warn("Google Identity Client initialization skipped:", e);
     }
-    notepad.value += " " + transcript;
-  };
-
-  recognition.onend = () => {
-    statusText.innerText = "Status: Paused";
-    startBtn.disabled = false;
-    stopBtn.disabled = true;
-  };
-
-  startBtn.onclick = () => recognition.start();
-  stopBtn.onclick = () => recognition.stop();
-} else {
-  statusText.innerText = "Status: Speech API not supported in this browser";
-}
-
-// Utility Export Functions (Testable silently right now!)
-function copyText() {
-  if (!notepad.value) return alert("Nothing to copy yet!");
-  navigator.clipboard.writeText(notepad.value);
-  alert("Text copied to clipboard!");
-}
-
-function sendToDocs() {
-  if (notepad.value) {
-    navigator.clipboard.writeText(notepad.value);
-    alert("Copied text to clipboard! Opening a fresh Google Doc...");
   }
-  window.open('https://docs.new', '_blank');
-}
-
-function sendToOutlook() {
-  const bodyText = encodeURIComponent(notepad.value);
-  window.location.href = `mailto:?subject=Thought%20Dump%20Notes&body=${bodyText}`;
-}
-
-function clearText() {
-  if (confirm("Are you sure you want to clear your notes?")) {
-    notepad.value = "";
-  }
-}
-
-function triggerAICleanup() {
-  alert("Stripe Checkout Flow: This will connect to $0.99 payment + GPT-4o API tonight!");
-}
+});
