@@ -19,6 +19,17 @@ window.exportToGoogleDocs = function() {
     return;
   }
 
+  // 1. Copy to clipboard
+  navigator.clipboard.writeText(textContent).then(() => {
+    alert("Transcript copied to clipboard! Opening Google Docs—press Ctrl+V (or Cmd+V) to paste.");
+  }).catch(err => {
+    console.error("Clipboard copy failed:", err);
+  });
+
+  // 2. Open tab immediately so the browser does not block it as a popup
+  window.open('https://docs.new', '_blank');
+};
+
   // Copies text to clipboard and launches Google Docs
   navigator.clipboard.writeText(textContent).then(() => {
     alert("Transcript copied to clipboard! Opening Google Docs—press Ctrl+V (or Cmd+V) to paste.");
