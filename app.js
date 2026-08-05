@@ -2,12 +2,32 @@
 const CLIENT_ID = '77521483085-00bbkjm3k8bs4s3q04sic19iikl1mc87.apps.googleusercontent.com';
 const SCOPE = 'https://www.googleapis.com/auth/documents https://www.googleapis.com/auth/drive.file';
 
-let tokenClient;
+let tokenClient = null;
 
 // Helper to safely retrieve notepad text
 function getTranscriptText() {
   const notepad = document.getElementById('notepad');
   return notepad ? notepad.value : '';
+}
+
+// Ensure Google Identity Services client is initialized
+function ensureGoogleClient() {
+  if (tokenClient) return true;
+
+  if (window.google && window.google.accounts && window.google.accounts.oauth2) {
+    try {
+      tokenClient = google.accounts.oauth2.initTokenClient({
+        client_id: CLIENT_ID,
+        scope: SCOPE,
+        callback: () => {} // Overridden dynamically in exportToGoogleDocs
+      });
+      return true;
+    } catch (e) {
+      console.error("Failed to initialize Google Token Client:", e);
+      return false;
+    }
+  }
+  return false;
 }
 
 // 1. Google Docs Export (Direct API Write)
@@ -19,16 +39,21 @@ window.exportToGoogleDocs = function() {
     return;
   }
 
-  if (!tokenClient) {
-    alert("Google Service is not initialized yet. Please make sure Google SDK loaded.");
+  // Fallback check if SDK finished loading after page load
+  if (!ensureGoogleClient()) {
+    alert("Google Identity Services library is not loaded. Please check your index.html script tag or internet connection.");
     return;
   }
 
-  // Define what happens when Google returns the access token
+  // Pre-open tab synchronously on user click to bypass browser popup blockers
+  const newTab = window.open('about:blank', '_blank');
+
+  // Define authorization callback
   tokenClient.callback = async (response) => {
     if (response.error) {
       console.error("Google Auth Error:", response);
-      alert("Google authorization failed.");
+      if (newTab) newTab.close();
+      alert("Google authorization failed: " + (response.error_description || response.error));
       return;
     }
 
@@ -47,11 +72,15 @@ window.exportToGoogleDocs = function() {
         })
       });
 
-      if (!createRes.ok) throw new Error("Failed to create document.");
+      if (!createRes.ok) {
+        const errData = await createRes.json();
+        throw new Error(errData.error ? errData.error.message : "Failed to create document.");
+      }
+
       const doc = await createRes.json();
       const documentId = doc.documentId;
 
-      // Step B: Insert the text from your notepad into index 1
+      // Step B: Insert the text from notepad at index 1
       const updateRes = await fetch(`https://docs.googleapis.com/v1/documents/${documentId}:batchUpdate`, {
         method: 'POST',
         headers: {
@@ -70,19 +99,28 @@ window.exportToGoogleDocs = function() {
         })
       });
 
-      if (!updateRes.ok) throw new Error("Failed to write text into document.");
+      if (!updateRes.ok) {
+        const errData = await updateRes.json();
+        throw new Error(errData.error ? errData.error.message : "Failed to write text into document.");
+      }
 
-      // Step C: Open the finished document in a new tab
-      window.open(`https://docs.google.com/document/d/${documentId}/edit`, '_blank');
+      // Step C: Navigate pre-opened tab to the created Google Doc
+      const docUrl = `https://docs.google.com/document/d/${documentId}/edit`;
+      if (newTab) {
+        newTab.location.href = docUrl;
+      } else {
+        window.open(docUrl, '_blank');
+      }
 
     } catch (err) {
       console.error("Export Error:", err);
-      alert("Error saving directly to Google Docs. Check console for details.");
+      if (newTab) newTab.close();
+      alert("Error saving directly to Google Docs: " + err.message);
     }
   };
 
-  // Trigger Google Login / Permission Prompt
-  tokenClient.requestAccessToken();
+  // Trigger Google OAuth popup
+  tokenClient.requestAccessToken({ prompt: 'consent' });
 };
 
 // 2. Copy Text Function
@@ -113,17 +151,6 @@ window.triggerAICleanup = function() {
   alert("AI Clean-Up payment integration coming soon!");
 };
 
-// Initialize Google Identity Client on DOM ready
-window.addEventListener('DOMContentLoaded', () => {
-  if (window.google) {
-    try {
-      tokenClient = google.accounts.oauth2.initTokenClient({
-        client_id: CLIENT_ID,
-        scope: SCOPE,
-        callback: () => {} // Callback set dynamically in exportToGoogleDocs
-      });
-    } catch (e) {
-      console.warn("Google Identity Client initialization skipped:", e);
-    }
-  }
-});
+// Initialize Google Identity Client on DOM ready & window load
+window.addEventListener('DOMContentLoaded', ensureGoogleClient);
+window.addEventListener('load', ensureGoogleClient);
