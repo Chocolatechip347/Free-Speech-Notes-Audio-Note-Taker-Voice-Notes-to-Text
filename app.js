@@ -1,6 +1,6 @@
-// Google Drive API Configuration
+// Google Drive & Docs API Configuration
 const CLIENT_ID = '77521483085-00bbkjm3k8bs4s3q04sic19iikl1mc87.apps.googleusercontent.com';
-const SCOPE = 'https://www.googleapis.com/auth/drive.file';
+const SCOPE = 'https://www.googleapis.com/auth/documents https://www.googleapis.com/auth/drive.file';
 
 let tokenClient;
 
@@ -10,34 +10,79 @@ function getTranscriptText() {
   return notepad ? notepad.value : '';
 }
 
-// 1. Google Docs Export (Clipboard + docs.new Fast Fallback)
+// 1. Google Docs Export (Direct API Write)
 window.exportToGoogleDocs = function() {
   const textContent = getTranscriptText();
-  
+
   if (!textContent.trim()) {
     alert("There is no text to save!");
     return;
   }
 
-  // 1. Copy to clipboard
-  navigator.clipboard.writeText(textContent).then(() => {
-    alert("Transcript copied to clipboard! Opening Google Docs—press Ctrl+V (or Cmd+V) to paste.");
-  }).catch(err => {
-    console.error("Clipboard copy failed:", err);
-  });
+  if (!tokenClient) {
+    alert("Google Service is not initialized yet. Please make sure Google SDK loaded.");
+    return;
+  }
 
-  // 2. Open tab immediately so the browser does not block it as a popup
-  window.open('https://docs.new', '_blank');
-};
+  // Define what happens when Google returns the access token
+  tokenClient.callback = async (response) => {
+    if (response.error) {
+      console.error("Google Auth Error:", response);
+      alert("Google authorization failed.");
+      return;
+    }
 
-  // Copies text to clipboard and launches Google Docs
-  navigator.clipboard.writeText(textContent).then(() => {
-    alert("Transcript copied to clipboard! Opening Google Docs—press Ctrl+V (or Cmd+V) to paste.");
-    window.open('https://docs.new', '_blank');
-  }).catch(err => {
-    console.error("Clipboard copy failed:", err);
-    alert("Failed to copy text automatically. Please copy your notes manually.");
-  });
+    const accessToken = response.access_token;
+
+    try {
+      // Step A: Create a blank document
+      const createRes = await fetch('https://docs.googleapis.com/v1/documents', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          title: 'ThoughtFlow Note - ' + new Date().toLocaleDateString()
+        })
+      });
+
+      if (!createRes.ok) throw new Error("Failed to create document.");
+      const doc = await createRes.json();
+      const documentId = doc.documentId;
+
+      // Step B: Insert the text from your notepad into index 1
+      const updateRes = await fetch(`https://docs.googleapis.com/v1/documents/${documentId}:batchUpdate`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          requests: [
+            {
+              insertText: {
+                location: { index: 1 },
+                text: textContent
+              }
+            }
+          ]
+        })
+      });
+
+      if (!updateRes.ok) throw new Error("Failed to write text into document.");
+
+      // Step C: Open the finished document in a new tab
+      window.open(`https://docs.google.com/document/d/${documentId}/edit`, '_blank');
+
+    } catch (err) {
+      console.error("Export Error:", err);
+      alert("Error saving directly to Google Docs. Check console for details.");
+    }
+  };
+
+  // Trigger Google Login / Permission Prompt
+  tokenClient.requestAccessToken();
 };
 
 // 2. Copy Text Function
@@ -75,11 +120,7 @@ window.addEventListener('DOMContentLoaded', () => {
       tokenClient = google.accounts.oauth2.initTokenClient({
         client_id: CLIENT_ID,
         scope: SCOPE,
-        callback: (tokenResponse) => {
-          if (tokenResponse.access_token) {
-            console.log("Google Access Token Received:", tokenResponse.access_token);
-          }
-        },
+        callback: () => {} // Callback set dynamically in exportToGoogleDocs
       });
     } catch (e) {
       console.warn("Google Identity Client initialization skipped:", e);
