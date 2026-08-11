@@ -35,7 +35,23 @@
           spellcheck="true"
         ></textarea>
       </div>
+      <div class="app-container" style="display: flex; height: 100vh;">
+    <!-- Sidebar for Saved Notes / Chats -->
+    <aside style="width: 250px; background: #f4f4f4; padding: 20px; border-right: 1px solid #ddd; overflow-y: auto;">
+        <button id="newNoteBtn" style="width: 100%; padding: 10px; margin-bottom: 15px; cursor: pointer;">+ New Note</button>
+        <h3>Saved Notes</h3>
+        <ul id="notesList" style="list-style: none; padding: 0;">
+            <!-- Past notes will populate here dynamically -->
+        </ul>
+    </aside>
 
+    <!-- Main Editor Area -->
+    <main style="flex: 1; padding: 20px; display: flex; flex-direction: column;">
+        <input type="text" id="noteTitle" placeholder="Note Title / Chapter Heading..." style="font-size: 1.5rem; margin-bottom: 10px; padding: 5px;">
+        <textarea id="transcriptEditor" placeholder="Start speaking or typing..." style="flex: 1; padding: 10px; font-size: 1rem; resize: none;"></textarea>
+        <div id="saveStatus" style="font-size: 0.8rem; color: #666; margin-top: 5px;">Ready</div>
+    </main>
+</div>
       <!-- Quick Action / Export Buttons -->
       <div class="action-bar">
         <button onclick="copyText()" class="btn btn-utility">📋 Copy Text</button>
