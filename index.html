@@ -105,49 +105,46 @@
         </div>
       </section>
     </main>
-  // 1. Select your text input/editor element
-const transcriptEditor = document.getElementById('transcriptEditor');
-const saveStatus = document.getElementById('saveStatus'); // Optional UI indicator
+ 
+<!-- Put this inside your HTML file, usually right before the closing </body> tag -->
+<script>
+    // 1. Select your text input/editor element 
+    const transcriptEditor = document.getElementById('transcriptEditor'); 
+    const saveStatus = document.getElementById('saveStatus'); 
 
-// 2. Load saved data when the page loads
-window.addEventListener('DOMContentLoaded', () => {
-    const savedText = localStorage.getItem('unsaved_transcript');
-    
-    if (savedText && savedText.trim() !== '') {
-        // Option A: Auto-load it
-        transcriptEditor.value = savedText;
-        
-        // Option B: Or prompt the user (as discussed earlier)
-        // if(confirm("Restore your previous session?")) { transcriptEditor.value = savedText; }
-        
-        updateSaveStatus('Restored from previous session');
+    // 2. Load saved data when the page loads 
+    window.addEventListener('DOMContentLoaded', () => { 
+        const savedText = localStorage.getItem('unsaved_transcript'); 
+        if (savedText && savedText.trim() !== '') { 
+            transcriptEditor.value = savedText; 
+            updateSaveStatus('Restored from previous session'); 
+        } 
+    }); 
+
+    // 3. Auto-save on every input change 
+    let saveTimeout; 
+    transcriptEditor.addEventListener('input', () => { 
+        updateSaveStatus('Saving locally...'); 
+        clearTimeout(saveTimeout); 
+        saveTimeout = setTimeout(() => { 
+            localStorage.setItem('unsaved_transcript', transcriptEditor.value); 
+            updateSaveStatus('All changes saved locally'); 
+        }, 500); 
+    }); 
+
+    // 4. Clear local storage only when the user explicitly saves or exports 
+    function clearLocalBackup() { 
+        localStorage.removeItem('unsaved_transcript'); 
+        updateSaveStatus('Transcript saved to cloud/downloaded'); 
+    } 
+
+    // Helper function for UI feedback 
+    function updateSaveStatus(message) { 
+        if (saveStatus) { 
+            saveStatus.textContent = message; 
+        } 
     }
-});
-
-// 3. Auto-save on every input change (with a slight debounce for performance)
-let saveTimeout;
-transcriptEditor.addEventListener('input', () => {
-    updateSaveStatus('Saving locally...');
-    
-    clearTimeout(saveTimeout);
-    saveTimeout = setTimeout(() => {
-        localStorage.setItem('unsaved_transcript', transcriptEditor.value);
-        updateSaveStatus('All changes saved locally');
-    }, 500); // Saves 500ms after the user stops typing/speaking
-});
-
-// 4. Clear local storage only when the user explicitly saves or exports
-function clearLocalBackup() {
-    localStorage.removeItem('unsaved_transcript');
-    updateSaveStatus('Transcript saved to cloud/downloaded');
-}
-
-// Helper function for UI feedback
-function updateSaveStatus(message) {
-    if (saveStatus) {
-        saveStatus.textContent = message;
-    }
-}
+</script>
     <footer class="app-footer">
       <p>100% Client-Side Dictation • Private & Secure • Powered by Web Speech API</p>
       <p style="margin-top: 10px;">
